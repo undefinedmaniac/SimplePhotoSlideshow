@@ -7,28 +7,30 @@ PhotoList::PhotoList(QObject *parent) : QObject(parent)
 
 void PhotoList::processDirectory(const QString &directory)
 {
-    QDir fileDirectory(directory);
+    mBaseUrl = QUrl(directory);
+
+    QDir fileDirectory(mBaseUrl.toLocalFile());
 
     QStringList nameFilters;
 
-    nameFilters.append(QStringLiteral(".jpg"));
-    nameFilters.append(QStringLiteral(".png"));
-    nameFilters.append(QStringLiteral(".bmp"));
+    nameFilters.append(QStringLiteral("*.jpg"));
+    nameFilters.append(QStringLiteral("*.png"));
+    nameFilters.append(QStringLiteral("*.bmp"));
 
     mImages = QVector<QString>::fromList(fileDirectory.entryList(nameFilters, QDir::Files));
 }
 
-QVariant PhotoList::nextImage()
+QUrl PhotoList::nextImage()
 {
     int count = mImages.count();
 
     if (count == 0)
-        return QVariant();
+        return QUrl();
 
     if (mIndex >= count)
         mIndex = 0;
 
-    QVariant image(mImages.at(mIndex));
+    QUrl image(mBaseUrl.toString() + "/" + mImages.at(mIndex));
 
     mIndex++;
 

@@ -6,6 +6,7 @@
 #include <QUrl>
 #include <QDir>
 #include <QObject>
+#include <QDebug>
 
 class PhotoList : public QObject
 {
@@ -15,13 +16,14 @@ public:
 
     Q_INVOKABLE void processDirectory(const QString &directory);
 
-    Q_INVOKABLE QVariant nextImage();
+    Q_INVOKABLE QUrl nextImage();
 
 signals:
 
 public slots:
 
 private:
+    QUrl mBaseUrl;
     QVector<QString> mImages;
     int mIndex = 0;
 };
